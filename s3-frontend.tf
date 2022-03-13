@@ -3,6 +3,29 @@ resource "aws_s3_bucket" "frontend" {
   force_destroy = false
 }
 
+resource "aws_iam_user" "publii_s3_frontend" {
+  name = "publii-s3-${local.project_name}"
+}
+
+data "template_file" "publii_s3_frontend_policy" {
+  template = file("${path.module}/policies/s3-rw.json.tpl")
+
+  vars = {
+    bucket_arn  = aws_s3_bucket.frontend.arn
+    kms_key_arn = aws_kms_key.s3_bucket_frontend.arn
+  }
+}
+
+resource "aws_iam_policy" "publii_s3_frontend" {
+  name   = "publii-s3-frontend-${local.project_name}"
+  policy = data.template_file.publii_s3_frontend_policy.rendered
+}
+
+resource "aws_iam_user_policy_attachment" "publii_s3_frontend" {
+  user       = aws_iam_user.publii_s3_frontend.name
+  policy_arn = aws_iam_policy.publii_s3_frontend.arn
+}
+
 resource "aws_s3_bucket_versioning" "frontend" {
   bucket = aws_s3_bucket.frontend.id
   versioning_configuration {
