@@ -1,0 +1,75 @@
+resource "aws_s3_bucket" "frontend" {
+  bucket        = "frontend-${local.project_name}"
+  force_destroy = false
+}
+
+resource "aws_s3_bucket_versioning" "frontend" {
+  bucket = aws_s3_bucket.frontend.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+
+resource "aws_s3_bucket_logging" "example" {
+  bucket        = aws_s3_bucket.frontend.id
+  target_bucket = aws_s3_bucket.frontend_logging.id
+  target_prefix = "log/"
+}
+
+resource "aws_s3_bucket_acl" "frontend" {
+  bucket = aws_s3_bucket.frontend.id
+  acl    = local.s3_bucket_acl
+}
+
+resource "aws_s3_bucket_public_access_block" "frontend" {
+  bucket                  = aws_s3_bucket.frontend.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_website_configuration" "frontend" {
+  bucket = aws_s3_bucket.frontend.bucket
+
+  index_document {
+    suffix = "index.html"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "frontend" {
+  bucket = aws_s3_bucket.frontend.bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.s3_bucket_frontend.arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+data "template_file" "frontend_bucket_enforce_tls_statement" {
+  template = file("${path.module}/policies/s3-bucket-policy-statements/enforce-tls.json.tpl")
+
+  vars = {
+    bucket_arn = aws_s3_bucket.frontend.arn
+  }
+}
+
+data "template_file" "frontend_bucket_policy" {
+  template = file("${path.module}/policies/s3-bucket-policy.json.tpl")
+
+  vars = {
+    statement = <<EOT
+[
+${data.template_file.frontend_bucket_enforce_tls_statement.rendered}
+]
+EOT
+  }
+}
+
+resource "aws_s3_bucket_policy" "frontend" {
+  bucket = aws_s3_bucket.frontend.id
+  policy = data.template_file.frontend_bucket_policy.rendered
+}
