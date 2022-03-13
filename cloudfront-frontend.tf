@@ -68,7 +68,7 @@ resource "aws_cloudfront_distribution" "frontend" {
 
   is_ipv6_enabled = local.cloudfront_enable_ipv6
 
-  web_acl_id = aws_wafv2_web_acl.cloudfront_waf.id
+  web_acl_id = aws_wafv2_web_acl.cloudfront_waf.arn
 
   logging_config {
     include_cookies = false
