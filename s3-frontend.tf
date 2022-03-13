@@ -80,7 +80,7 @@ data "template_file" "frontend_bucket_enforce_tls_statement" {
 }
 
 data "template_file" "frontend_bucket_cloudfront_read" {
-  template = file("./policies/s3-bucket-policy-statements/cloudfront-read.json.tpl")
+  template = file("${path.module}/policies/s3-bucket-policy-statements/cloudfront-read.json.tpl")
 
   vars = {
     bucket_arn             = aws_s3_bucket.frontend.arn
