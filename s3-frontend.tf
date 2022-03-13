@@ -42,7 +42,7 @@ resource "aws_s3_bucket_logging" "example" {
 
 resource "aws_s3_bucket_acl" "frontend" {
   bucket = aws_s3_bucket.frontend.id
-  acl    = local.s3_bucket_acl
+  acl    = "private"
 }
 
 resource "aws_s3_bucket_public_access_block" "frontend" {
