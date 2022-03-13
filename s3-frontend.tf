@@ -33,8 +33,7 @@ resource "aws_s3_bucket_versioning" "frontend" {
   }
 }
 
-
-resource "aws_s3_bucket_logging" "example" {
+resource "aws_s3_bucket_logging" "frontend" {
   bucket        = aws_s3_bucket.frontend.id
   target_bucket = aws_s3_bucket.frontend_logging.id
   target_prefix = "log/"
@@ -80,13 +79,23 @@ data "template_file" "frontend_bucket_enforce_tls_statement" {
   }
 }
 
+data "template_file" "frontend_bucket_cloudfront_read" {
+  template = file("./policies/s3-bucket-policy-statements/cloudfront-read.json.tpl")
+
+  vars = {
+    bucket_arn             = aws_s3_bucket.frontend.arn
+    origin_access_identity = aws_cloudfront_origin_access_identity.frontend.iam_arn
+  }
+}
+
 data "template_file" "frontend_bucket_policy" {
   template = file("${path.module}/policies/s3-bucket-policy.json.tpl")
 
   vars = {
     statement = <<EOT
 [
-${data.template_file.frontend_bucket_enforce_tls_statement.rendered}
+${data.template_file.frontend_bucket_enforce_tls_statement.rendered},
+${data.template_file.frontend_bucket_cloudfront_read.rendered}
 ]
 EOT
   }
