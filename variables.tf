@@ -19,3 +19,9 @@ variable "cloudfront_enable_ipv6" {
   type        = bool
   default     = true
 }
+
+variable "cloudfront_enable_waf" {
+  description = "Enable CloudFront WAF"
+  type        = bool
+  default     = true
+}

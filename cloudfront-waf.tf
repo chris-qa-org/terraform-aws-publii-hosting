@@ -1,4 +1,6 @@
 resource "aws_wafv2_web_acl" "cloudfront_waf" {
+  count = local.cloudfront_enable_waf ? 1 : 0
+
   provider = aws.useast1
 
   name        = "${local.project_name}-acl"
