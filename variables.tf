@@ -31,3 +31,9 @@ variable "cloudfront_enable_apex_to_www_redirect" {
   type        = bool
   default     = true
 }
+
+variable "enable_publii_pretty_urls" {
+  description = "If you hae enabled 'Pretty URLs' in Publii, set this to true"
+  type        = bool
+  default     = false
+}
