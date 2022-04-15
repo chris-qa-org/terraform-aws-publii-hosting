@@ -105,3 +105,15 @@ resource "aws_s3_bucket_policy" "frontend" {
   bucket = aws_s3_bucket.frontend.id
   policy = data.template_file.frontend_bucket_policy.rendered
 }
+
+resource "aws_s3_bucket_notification" "frontend_cloudfront_invalidation" {
+  bucket = aws_s3_bucket.frontend.id
+
+  lambda_function {
+    lambda_function_arn = module.lambda_cloudfront_invalidation_frontend.function_arn
+    events              = ["s3:ObjectCreated:*"]
+    filter_prefix       = "files.publii.json"
+  }
+
+  depends_on = [aws_lambda_permission.cloudfront_invalidation_frontend_alllow_s3]
+}
