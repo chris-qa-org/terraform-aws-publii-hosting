@@ -1,28 +1,33 @@
-resource "aws_cloudfront_origin_access_identity" "frontend" {
-  comment = "${local.project_name} frontend"
+resource "aws_cloudfront_origin_access_identity" "frontend_www_redirect" {
+  count = local.cloudfront_enable_apex_to_www_redirect ? 1 : 0
+
+  comment = "${local.project_name} frontend www redirect"
 }
 
-resource "aws_cloudfront_distribution" "frontend" {
-  origin {
-    domain_name = aws_s3_bucket.frontend.bucket_regional_domain_name
-    origin_id   = local.project_name
+resource "aws_cloudfront_distribution" "frontend_www_redirect" {
+  count = local.cloudfront_enable_apex_to_www_redirect ? 1 : 0
 
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.frontend.cloudfront_access_identity_path
+  origin {
+    domain_name = element(aws_s3_bucket.frontend_www_redirect.*.website_endpoint, 0)
+    origin_id   = "${local.project_name}-www-redirect"
+
+    custom_origin_config {
+      origin_protocol_policy = "http-only"
+      http_port              = "80"
+      https_port             = "443"
+      origin_ssl_protocols   = ["TLSv1.2"]
     }
   }
 
   enabled = true
-  aliases = local.cloudfront_enable_apex_to_www_redirect ? [
-    "www.${local.site_url}"
-    ] : [
+  aliases = [
     local.site_url
   ]
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.project_name
+    target_origin_id = "${local.project_name}-www-redirect"
 
     forwarded_values {
       query_string = false
@@ -38,20 +43,6 @@ resource "aws_cloudfront_distribution" "frontend" {
     compress    = true
 
     viewer_protocol_policy = "redirect-to-https"
-  }
-
-  default_root_object = "index.html"
-
-  custom_error_response {
-    error_code         = "404"
-    response_code      = "404"
-    response_page_path = "/404.html"
-  }
-
-  custom_error_response {
-    error_code         = "403"
-    response_code      = "404"
-    response_page_path = "/404.html"
   }
 
   price_class = "PriceClass_100"
@@ -75,6 +66,6 @@ resource "aws_cloudfront_distribution" "frontend" {
   logging_config {
     include_cookies = false
     bucket          = aws_s3_bucket.logs.bucket_domain_name
-    prefix          = "cloudfront/frontend/"
+    prefix          = "cloudfront/frontend-www-redirect/"
   }
 }
