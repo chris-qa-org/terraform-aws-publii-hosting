@@ -25,3 +25,9 @@ variable "cloudfront_enable_waf" {
   type        = bool
   default     = true
 }
+
+variable "cloudfront_enable_apex_to_www_redirect" {
+  description = "Enable CloudFront apex to www redirect"
+  type        = bool
+  default     = true
+}
