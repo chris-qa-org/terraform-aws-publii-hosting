@@ -72,7 +72,7 @@ resource "aws_cloudfront_distribution" "frontend" {
 
   logging_config {
     include_cookies = false
-    bucket          = aws_s3_bucket.cloudfront_frontend_logging.bucket_domain_name
-    prefix          = "log/"
+    bucket          = aws_s3_bucket.logs.bucket_domain_name
+    prefix          = "cloudfront/frontend/"
   }
 }
