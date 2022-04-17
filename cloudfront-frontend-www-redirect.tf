@@ -54,7 +54,7 @@ resource "aws_cloudfront_distribution" "frontend_www_redirect" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = local.cloudfront_tls_certificate_arn
+    acm_certificate_arn      = local.cloudfront_tls_certificate_arn == "" ? aws_acm_certificate.cloudfront_frontend.0.arn : local.cloudfront_tls_certificate_arn
     minimum_protocol_version = "TLSv1.2_2021"
     ssl_support_method       = "sni-only"
   }
@@ -68,4 +68,8 @@ resource "aws_cloudfront_distribution" "frontend_www_redirect" {
     bucket          = aws_s3_bucket.logs.bucket_domain_name
     prefix          = "cloudfront/frontend-www-redirect/"
   }
+
+  depends_on = [
+    aws_acm_certificate_validation.cloudfront_frontend
+  ]
 }

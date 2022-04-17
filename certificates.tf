@@ -15,3 +15,14 @@ resource "aws_acm_certificate" "cloudfront_frontend" {
   }
 }
 
+resource "aws_acm_certificate_validation" "cloudfront_frontend" {
+  provider = aws.useast1
+
+  count = local.cloudfront_tls_certificate_arn == "" ? (
+    local.route53_hosted_zone_options.create_certificate_dns_validation_records ? 1 : 0
+  ) : 0
+
+  certificate_arn         = aws_acm_certificate.cloudfront_frontend.0.arn
+  validation_record_fqdns = [for record in aws_route53_record.cloudfront_frontend_tls_certificate_dns_validation : record.fqdn]
+}
+
