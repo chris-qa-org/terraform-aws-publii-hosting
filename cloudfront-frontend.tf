@@ -68,7 +68,7 @@ resource "aws_cloudfront_distribution" "frontend" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = local.cloudfront_tls_certificate_arn
+    acm_certificate_arn      = local.cloudfront_tls_certificate_arn == "" ? aws_acm_certificate.cloudfront_frontend.0.arn : local.cloudfront_tls_certificate_arn
     minimum_protocol_version = "TLSv1.2_2021"
     ssl_support_method       = "sni-only"
   }
@@ -82,4 +82,8 @@ resource "aws_cloudfront_distribution" "frontend" {
     bucket          = aws_s3_bucket.logs.bucket_domain_name
     prefix          = "cloudfront/frontend/"
   }
+
+  depends_on = [
+    aws_route53_record.cloudfront_frontend_tls_certificate_dns_validation
+  ]
 }
