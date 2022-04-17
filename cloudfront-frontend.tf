@@ -84,6 +84,6 @@ resource "aws_cloudfront_distribution" "frontend" {
   }
 
   depends_on = [
-    aws_route53_record.cloudfront_frontend_tls_certificate_dns_validation
+    aws_acm_certificate_validation.cloudfront_frontend
   ]
 }

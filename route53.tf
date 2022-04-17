@@ -1,16 +1,19 @@
 resource "aws_route53_record" "cloudfront_frontend_tls_certificate_dns_validation" {
-  count = local.cloudfront_tls_certificate_arn == "" ? (
-    local.route53_hosted_zone_options.create_certificate_dns_validation_records ? 1 : 0
-  ) : 0
+  for_each = local.cloudfront_tls_certificate_arn == "" ? (
+    local.route53_hosted_zone_options.create_certificate_dns_validation_records ? {
+      for dvo in aws_acm_certificate.cloudfront_frontend.0.domain_validation_options : dvo.domain_name => {
+        name   = dvo.resource_record_name
+        record = dvo.resource_record_value
+        type   = dvo.resource_record_type
+      }
+    } : null
+  ) : null
 
   zone_id = data.aws_route53_zone.default.0.zone_id
-  name    = tolist(aws_acm_certificate.cloudfront_frontend.0.domain_validation_options)[0].resource_record_name
-  type    = tolist(aws_acm_certificate.cloudfront_frontend.0.domain_validation_options)[0].resource_record_type
+  name    = each.value.name
+  records = [each.value.record]
+  type    = each.value.type
   ttl     = "86400"
-
-  records = [
-    tolist(aws_acm_certificate.cloudfront_frontend.0.domain_validation_options)[0].resource_record_value,
-  ]
 }
 
 resource "aws_route53_record" "frontend" {
