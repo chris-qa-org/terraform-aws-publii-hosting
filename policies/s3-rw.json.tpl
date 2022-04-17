@@ -14,15 +14,6 @@
         "${bucket_arn}",
         "${bucket_arn}/*"
       ]
-    },
-    {
-      "Action": [
-        "kms:GenerateDataKey"
-      ],
-      "Effect": "Allow",
-      "Resource": [
-        "${kms_key_arn}"
-      ]
     }
   ]
 }
