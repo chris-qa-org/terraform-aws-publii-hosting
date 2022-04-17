@@ -7,4 +7,5 @@ locals {
   cloudfront_enable_waf                  = var.cloudfront_enable_waf
   cloudfront_enable_apex_to_www_redirect = var.cloudfront_enable_apex_to_www_redirect
   enable_publii_pretty_urls              = var.enable_publii_pretty_urls
+  route53_hosted_zone_options            = var.route53_hosted_zone_options
 }
