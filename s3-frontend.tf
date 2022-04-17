@@ -11,8 +11,7 @@ data "template_file" "publii_s3_frontend_policy" {
   template = file("${path.module}/policies/s3-rw.json.tpl")
 
   vars = {
-    bucket_arn  = aws_s3_bucket.frontend.arn
-    kms_key_arn = aws_kms_key.s3_bucket_frontend.arn
+    bucket_arn = aws_s3_bucket.frontend.arn
   }
 }
 
@@ -60,13 +59,17 @@ resource "aws_s3_bucket_website_configuration" "frontend" {
   }
 }
 
+# TODO: Use customer key instead
+#       This bucket will be used by CloudFront, so a Lambda will need to be created
+#       to sign requests
+#       https://aws.amazon.com/blogs/networking-and-content-delivery/serving-sse-kms-encrypted-content-from-s3-using-cloudfront/
+#tfsec:ignore:aws-s3-encryption-customer-key
 resource "aws_s3_bucket_server_side_encryption_configuration" "frontend" {
   bucket = aws_s3_bucket.frontend.bucket
 
   rule {
     apply_server_side_encryption_by_default {
-      kms_master_key_id = aws_kms_key.s3_bucket_frontend.arn
-      sse_algorithm     = "aws:kms"
+      sse_algorithm = "AES256"
     }
   }
 }
