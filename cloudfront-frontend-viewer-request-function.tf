@@ -7,7 +7,7 @@ data "template_file" "cloudfront_frontend_viewer_request_function" {
 }
 
 resource "aws_cloudfront_function" "frontend_viewer_request" {
-  name    = "frontend-viewer-request"
+  name    = "frontend-viewer-request-${local.project_name}"
   runtime = "cloudfront-js-1.0"
   comment = "frontend viewer-request function"
   publish = true
