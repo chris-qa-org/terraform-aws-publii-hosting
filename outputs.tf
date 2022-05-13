@@ -22,3 +22,8 @@ output "aws_acm_certificate_cloudfront_frontend" {
   description = "CloudFront frontend's ACM TLS certificate attributes"
   value       = local.cloudfront_tls_certificate_arn == "" ? aws_acm_certificate.cloudfront_frontend.0 : null
 }
+
+output "aws_cloudfront_origin_access_identity_frontend" {
+  description = "CloudFront frontend's associated origin access identity"
+  value       = aws_cloudfront_origin_access_identity.frontend
+}
