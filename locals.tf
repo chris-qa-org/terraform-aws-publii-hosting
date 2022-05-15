@@ -9,4 +9,5 @@ locals {
   enable_publii_pretty_urls              = var.enable_publii_pretty_urls
   route53_hosted_zone_options            = var.route53_hosted_zone_options
   cloudfront_ordered_cache_behaviors     = var.cloudfront_ordered_cache_behaviors
+  cloudfront_origins                     = var.cloudfront_origins
 }
