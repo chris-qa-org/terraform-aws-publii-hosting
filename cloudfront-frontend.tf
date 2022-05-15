@@ -59,6 +59,72 @@ resource "aws_cloudfront_distribution" "frontend" {
     response_page_path = "/404.html"
   }
 
+  ## borrowed/copied from https://github.com/terraform-aws-modules/terraform-aws-cloudfront/blob/master/main.tf
+  dynamic "ordered_cache_behavior" {
+    for_each = local.cloudfront_ordered_cache_behaviors
+    iterator = i
+
+    content {
+      path_pattern           = i.value["path_pattern"]
+      target_origin_id       = i.value["target_origin_id"]
+      viewer_protocol_policy = i.value["viewer_protocol_policy"]
+
+      allowed_methods           = lookup(i.value, "allowed_methods", ["GET", "HEAD", "OPTIONS"])
+      cached_methods            = lookup(i.value, "cached_methods", ["GET", "HEAD"])
+      compress                  = lookup(i.value, "compress", null)
+      field_level_encryption_id = lookup(i.value, "field_level_encryption_id", null)
+      smooth_streaming          = lookup(i.value, "smooth_streaming", null)
+      trusted_signers           = lookup(i.value, "trusted_signers", null)
+      trusted_key_groups        = lookup(i.value, "trusted_key_groups", null)
+
+      cache_policy_id            = lookup(i.value, "cache_policy_id", null)
+      origin_request_policy_id   = lookup(i.value, "origin_request_policy_id", null)
+      response_headers_policy_id = lookup(i.value, "response_headers_policy_id", null)
+      realtime_log_config_arn    = lookup(i.value, "realtime_log_config_arn", null)
+
+      min_ttl     = lookup(i.value, "min_ttl", null)
+      default_ttl = lookup(i.value, "default_ttl", null)
+      max_ttl     = lookup(i.value, "max_ttl", null)
+
+      dynamic "forwarded_values" {
+        for_each = lookup(i.value, "use_forwarded_values", true) ? [true] : []
+
+        content {
+          query_string            = lookup(i.value, "query_string", false)
+          query_string_cache_keys = lookup(i.value, "query_string_cache_keys", [])
+          headers                 = lookup(i.value, "headers", [])
+
+          cookies {
+            forward           = lookup(i.value, "cookies_forward", "none")
+            whitelisted_names = lookup(i.value, "cookies_whitelisted_names", null)
+          }
+        }
+      }
+
+      dynamic "lambda_function_association" {
+        for_each = lookup(i.value, "lambda_function_association", [])
+        iterator = l
+
+        content {
+          event_type   = l.key
+          lambda_arn   = l.value.lambda_arn
+          include_body = lookup(l.value, "include_body", null)
+        }
+      }
+
+      dynamic "function_association" {
+        for_each = lookup(i.value, "function_association", [])
+        iterator = f
+
+        content {
+          event_type   = f.key
+          function_arn = f.value.function_arn
+        }
+      }
+    }
+  }
+  ##
+
   price_class = "PriceClass_100"
 
   restrictions {
