@@ -33,6 +33,12 @@ variable "cloudfront_enable_apex_to_www_redirect" {
   default     = true
 }
 
+variable "cloudfront_origins" {
+  description = "List of origin objects. https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution#origin-arguments"
+  type        = any
+  default     = []
+}
+
 variable "cloudfront_ordered_cache_behaviors" {
   description = "List of ordered_cache_behavior objects. https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution#cache-behavior-arguments"
   type        = any
