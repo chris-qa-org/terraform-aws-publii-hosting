@@ -9,7 +9,7 @@ data "template_file" "lambda_cloudfront_invalidation_frontend_policy" {
 module "lambda_cloudfront_invalidation_frontend" {
   source = "github.com/claranet/terraform-aws-lambda?ref=v1.4.0"
 
-  function_name = "${local.project_name}-cloudfront-invalidation-frontend"
+  function_name = substr("${local.project_name}-cloudfront-invalidation-frontend", 0, 64)
   description   = "${local.project_name} CloudFront invalidation frontend"
   handler       = "function.lambda_handler"
   runtime       = "python3.9"
