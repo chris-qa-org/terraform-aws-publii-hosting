@@ -1,0 +1,8 @@
+# This is not used, it's just here to allow `terraform validate`
+# to succeed in CI
+# https://github.com/hashicorp/terraform/issues/28490
+
+provider "aws" {
+  region = "us-east-1"
+  alias  = "useast1"
+}
