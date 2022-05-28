@@ -13,7 +13,7 @@ resource "aws_route53_zone" "example" {
 }
 
 module "aws_publii_hosting" {
-  source  = "chris-qa-org/terraform-aws-publii-hosting/aws"
+  source  = "chris-qa-org/publii-hosting/aws"
   version = "v1.0.1"
 
   providers = {
