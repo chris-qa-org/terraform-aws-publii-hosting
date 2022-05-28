@@ -27,3 +27,13 @@ output "aws_cloudfront_origin_access_identity_frontend" {
   description = "CloudFront frontend's associated origin access identity"
   value       = aws_cloudfront_origin_access_identity.frontend
 }
+
+output "aws_cloudfront_distribution_frontend" {
+  description = "CloudFront distribution frontend attributes"
+  value       = aws_cloudfront_distribution.frontend
+}
+
+output "aws_cloudfront_distribution_frontend_www_redirect" {
+  description = "CloudFront distribution frontend www redirect attributes"
+  value       = local.cloudfront_enable_apex_to_www_redirect ? aws_cloudfront_distribution.frontend_www_redirect.0 : null
+}
