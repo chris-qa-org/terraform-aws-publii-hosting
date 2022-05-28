@@ -14,7 +14,7 @@ resource "aws_route53_zone" "example" {
 
 module "aws_publii_hosting" {
   source  = "chris-qa-org/terraform-aws-publii-hosting/aws"
-  version = "v1.0.0"
+  version = "v1.0.1"
 
   providers = {
     aws.useast1 = aws.useast1
