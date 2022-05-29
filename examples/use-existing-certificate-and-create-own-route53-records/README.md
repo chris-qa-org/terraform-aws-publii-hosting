@@ -15,7 +15,7 @@ provider "aws" {
 
 module "aws_publii_hosting" {
   source  = "chris-qa-org/publii-hosting/aws"
-  version = "v1.1.0"
+  version = "v1.2.0"
 
   providers = {
     aws.useast1 = aws.useast1
