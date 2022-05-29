@@ -15,7 +15,7 @@ It can in most cases be used to host any static site, however this module adds s
  - Creates a CloudFront endpoint (And optionally ACM certificates and Route53 records in an existing Hosted Zone)
  - Creates a Lambda function to run a Cloudfront Invalidation when `files.publii.json` is created/updated (This file is updated on every sync)
  - Optionally have CloudFront do the right thing when 'Pretty URLs' are enabled (This is achieved via a CloudFront function which adds `index.html` to the URI if there is no extention)
- - Optionally redirect from the apex domain (eg. example.com) to www (www.example.com). If this is enabled (`var.cloudfront_enable_apex_to_www_redirect`), the 'Website Url' within 'Server' options should be set to www.yourdomain.com - [Publii S3 Server Settings docs (point 26)]
+ - Optionally redirect from the apex domain (eg. example.com) to www (www.example.com). If this is enabled (`var.cloudfront_enable_apex_to_www_redirect`), the 'Website Url' within 'Server' options should be set to www.yourdomain.com - [Publii S3 Server Settings docs (point 26)][2]
  - Optionally enable WAF
  - Optionally add custom origins and cache behaviours
 
