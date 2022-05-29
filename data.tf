@@ -3,3 +3,5 @@ data "aws_route53_zone" "default" {
 
   zone_id = local.route53_hosted_zone_options.id
 }
+
+data "aws_caller_identity" "current" {}

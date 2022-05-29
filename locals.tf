@@ -1,4 +1,5 @@
 locals {
+  account_id                             = data.aws_caller_identity.current.account_id
   site_url                               = var.site_url
   project_random_id                      = random_id.project.dec
   project_name                           = "${replace(local.site_url, ".", "-")}-${local.project_random_id}"
