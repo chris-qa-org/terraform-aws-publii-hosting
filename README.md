@@ -30,7 +30,7 @@ It can in most cases be used to host any static site, however this module adds s
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.1.7 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.2.1 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.4 |
 
 ## Providers
