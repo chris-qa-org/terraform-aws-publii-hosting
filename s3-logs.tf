@@ -23,9 +23,6 @@ resource "aws_s3_bucket_public_access_block" "logs" {
   restrict_public_buckets = true
 }
 
-# If default encryption is enabled on the target bucket, AES256 (SSE-S3) must be selected as the encryption key
-# https://aws.amazon.com/premiumsupport/knowledge-center/s3-server-access-log-not-delivered/
-#tfsec:ignore:aws-s3-encryption-customer-key
 resource "aws_s3_bucket_server_side_encryption_configuration" "logs" {
   bucket = aws_s3_bucket.logs.bucket
 
