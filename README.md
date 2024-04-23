@@ -30,16 +30,16 @@ It can in most cases be used to host any static site, however this module adds s
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.2.1 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.4 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.8.1 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.46.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.4.0 |
-| <a name="provider_aws.useast1"></a> [aws.useast1](#provider\_aws.useast1) | 4.4.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.1.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.46.0 |
+| <a name="provider_aws.useast1"></a> [aws.useast1](#provider\_aws.useast1) | 5.46.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.6.1 |
 | <a name="provider_template"></a> [template](#provider\_template) | 2.2.0 |
 
 ## Resources
